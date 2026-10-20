@@ -1,0 +1,10 @@
+{
+  "title": "K's Secure Note를 시작하며",
+  "titleEn": "Welcome to K's Secure Note",
+  "description": "웹·앱 보안 진단과 DevSecOps를 방어자 관점에서 기록하는 보안 기술 블로그를 소개합니다.",
+  "pubDate": "2026-10-20",
+  "category": "career",
+  "tags": ["Blog"],
+  "draft": false,
+  "htmlContent": "<div id=\"kr-content\"><div class=\"tldr\"><p><strong>TL;DR</strong></p><ul><li>웹·앱 취약점 분석, 소스코드 진단(SAST), DevSecOps를 방어자 관점에서 기록합니다.</li><li>모든 글은 한국어와 영어를 한 페이지에 함께 싣습니다.</li><li>실습은 자체 랩, 공개 교육 타깃, 인가된 환경에서만 다룹니다.</li></ul></div><h2 id=\"kr-s1\">1. 이 블로그에서 다루는 것</h2><p>취약점을 찾는 데서 끝나지 않고, 개발자가 바로 적용할 수 있는 조치까지 한 글 안에서 정리합니다. 가능하면 OWASP Top 10과 CWE 번호를 함께 적습니다.</p><h2 id=\"kr-s2\">2. 글을 쓰는 원칙</h2><ul><li>원리, 재현, 진단, 조치를 한 글 안에서 이어서 씁니다.</li><li>공개된 취약점과 공개 문서에 기반하고, 미공개 취약점은 다루지 않습니다.</li><li>실무 사례는 비식별화합니다.</li></ul></div><div id=\"en-content\" data-title=\"Welcome to K's Secure Note\"><div class=\"tldr\"><p><strong>TL;DR</strong></p><ul><li>Notes on web/app vulnerability analysis, source code review (SAST) and DevSecOps from a defender's perspective.</li><li>Every post carries Korean and English on one page.</li><li>Hands-on work uses self-built labs, public training targets, or authorized environments only.</li></ul></div><h2 id=\"en-s1\">1. What this blog covers</h2><p>Posts go beyond finding a vulnerability and end with a fix developers can apply right away, with OWASP Top 10 and CWE references where they fit.</p><h2 id=\"en-s2\">2. How the posts are written</h2><ul><li>Each post follows principle, reproduction, assessment and remediation.</li><li>It is based on publicly disclosed vulnerabilities and public documents; undisclosed vulnerabilities are not covered.</li><li>Field cases are de-identified.</li></ul></div>"
+}

@@ -4,12 +4,15 @@ import { z } from 'astro/zod';
 import { CATEGORIES } from './consts';
 
 const blog = defineCollection({
-	// Load Markdown and MDX files in the `src/content/blog/` directory.
-	loader: glob({ base: './src/content/blog', pattern: '**/*.{md,mdx}' }),
+	// Each post is one JSON file in `src/content/blog/`: frontmatter-like fields plus the
+	// Korean/English HTML body (`htmlContent`), the same shape the draft tool produces.
+	loader: glob({ base: './src/content/blog', pattern: '**/*.json' }),
 	// Type-check frontmatter using a schema
 	schema: ({ image }) =>
 		z.object({
 			title: z.string(),
+			// English title; shown when the reader switches the page to English.
+			titleEn: z.string(),
 			description: z.string(),
 			// Transform string to Date object
 			pubDate: z.coerce.date(),
@@ -22,6 +25,8 @@ const blog = defineCollection({
 			seriesOrder: z.number().optional(),
 			// Drafts show up in `npm run dev` but are left out of the production build.
 			draft: z.boolean().default(false),
+			// HTML with #kr-content and #en-content blocks; __BASE__ is replaced by the site base path.
+			htmlContent: z.string(),
 		}),
 });
 

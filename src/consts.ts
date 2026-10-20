@@ -1,8 +1,8 @@
 // Place any global data in this file.
 // You can import this data from anywhere in your site by using the `import` keyword.
 
-export const SITE_TITLE = 'Break & Fix';
-export const SITE_DESCRIPTION = '공격자의 눈으로 찾고, 개발자의 언어로 고치는 보안 기술 블로그';
+export const SITE_TITLE = "K's Secure Note";
+export const SITE_DESCRIPTION = '웹·앱 취약점 분석, 소스코드 진단(SAST), DevSecOps를 방어자 관점에서 기록하는 보안 기술 블로그';
 export const GITHUB_URL = 'https://github.com/ki3lo';
 
 // Every post belongs to exactly one category. The key is used in URLs and frontmatter.
@@ -17,7 +17,7 @@ export const CATEGORIES = {
 
 export type Category = keyof typeof CATEGORIES;
 
-// Prefix an absolute path with the configured `base` (e.g. '/my-tech-blog').
+// Prefix an absolute path with the configured `base` (empty when served from the domain root).
 export const withBase = (path: string) =>
 	`${import.meta.env.BASE_URL.replace(/\/$/, '')}${path}`;
 

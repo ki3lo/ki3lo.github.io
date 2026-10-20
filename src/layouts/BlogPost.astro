@@ -13,8 +13,22 @@ type Props = CollectionEntry<'blog'>['data'] & {
 	seriesPosts: CollectionEntry<'blog'>[];
 };
 
-const { id, title, description, pubDate, updatedDate, heroImage, category, tags, series, draft, seriesPosts } =
+const { id, title, titleEn, description, pubDate, updatedDate, heroImage, category, tags, series, draft, seriesPosts, htmlContent } =
 	Astro.props;
+const base = import.meta.env.BASE_URL.replace(/\/$/, '');
+const body = htmlContent.replaceAll('__BASE__', base);
+const jsonLd = {
+	'@context': 'https://schema.org',
+	'@type': 'TechArticle',
+	headline: title,
+	alternativeHeadline: titleEn,
+	datePublished: pubDate.toISOString().slice(0, 10),
+	...(updatedDate ? { dateModified: updatedDate.toISOString().slice(0, 10) } : {}),
+	inLanguage: ['ko', 'en'],
+	keywords: tags.join(', '),
+	author: { '@type': 'Person', name: SITE_TITLE },
+	publisher: { '@type': 'Organization', name: SITE_TITLE },
+};
 const seriesIndex = seriesPosts.findIndex((post) => post.id === id);
 const prev = seriesPosts[seriesIndex - 1];
 const next = seriesPosts[seriesIndex + 1];
@@ -23,7 +37,92 @@ const next = seriesPosts[seriesIndex + 1];
 <html lang="ko">
 	<head>
 		<BaseHead title={`${title} | ${SITE_TITLE}`} description={description} image={heroImage} />
+		<script is:inline>
+			document.documentElement.classList.add('js');
+		</script>
 		<style>
+			.lang-switch {
+				display: inline-flex;
+				margin: 0 0 1em;
+				border: 1px solid rgb(var(--gray-light));
+				border-radius: 8px;
+				overflow: hidden;
+			}
+			.lang-switch[hidden] {
+				display: none;
+			}
+			.lang-switch button {
+				padding: 0.4em 1.1em;
+				border: 0;
+				background: white;
+				color: rgb(var(--gray-dark));
+				font: inherit;
+				font-size: 0.85em;
+				cursor: pointer;
+			}
+			.lang-switch button[aria-pressed='true'] {
+				background: rgb(var(--gray-dark));
+				color: white;
+			}
+			.reading-time:not(:empty)::before {
+				content: ' · ';
+			}
+			:global(.post-body [hidden]) {
+				display: none;
+			}
+			:global(.js .lang-nav) {
+				display: none;
+			}
+			:global(.post-body blockquote) {
+				font-size: 1em;
+			}
+			:global(.post-body pre) {
+				position: relative;
+				overflow-x: auto;
+				background: #f6f8fa;
+				font-size: 0.85em;
+			}
+			:global(.post-body .copy-btn) {
+				position: absolute;
+				top: 6px;
+				right: 6px;
+				padding: 2px 8px;
+				border: 1px solid #d0d7de;
+				border-radius: 6px;
+				background: white;
+				font-size: 12px;
+				cursor: pointer;
+			}
+			:global(.post-body h2) {
+				scroll-margin-top: 1em;
+			}
+			.sticky-toc {
+				display: none;
+			}
+			.sticky-toc a {
+				display: block;
+				padding: 0.25em 0;
+				color: rgb(var(--gray));
+			}
+			.sticky-toc a.on {
+				color: rgb(var(--gray-dark));
+				font-weight: bold;
+			}
+			@media (min-width: 1240px) {
+				.sticky-toc:not([hidden]) {
+					display: block;
+					position: fixed;
+					top: 6em;
+					left: calc(50% + 380px);
+					width: 220px;
+					max-height: 70vh;
+					overflow-y: auto;
+					font-size: 0.8em;
+				}
+				:global(.js .post-body .toc) {
+					display: none;
+				}
+			}
 			main {
 				width: calc(100% - 2em);
 				max-width: 100%;
@@ -116,8 +215,9 @@ const next = seriesPosts[seriesIndex + 1];
 								)
 							}
 							{draft && <span class="draft">초안</span>}
+							<span id="reading-time" class="reading-time"></span>
 						</div>
-						<h1>{title}</h1>
+						<h1 id="post-title" data-ko={title} data-en={titleEn}>{title}</h1>
 						<TagList tags={tags} />
 						<hr />
 					</div>
@@ -144,7 +244,11 @@ const next = seriesPosts[seriesIndex + 1];
 						)
 					}
 
-					<slot />
+					<div class="lang-switch" id="lang-switch" role="group" aria-label="Language" hidden>
+						<button type="button" data-lang="ko">한국어</button>
+						<button type="button" data-lang="en">English</button>
+					</div>
+					<div class="post-body" set:html={body} />
 
 					{
 						(prev || next) && (
@@ -161,6 +265,9 @@ const next = seriesPosts[seriesIndex + 1];
 				</div>
 			</article>
 		</main>
+		<aside class="sticky-toc" id="sticky-toc" aria-label="목차" hidden></aside>
 		<Footer />
+		<script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+		<script is:inline src={`${base}/post.js`}></script>
 	</body>
 </html>
